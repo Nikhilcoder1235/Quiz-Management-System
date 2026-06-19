@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+
+
 import com.sunbeam.dao.userDao;
 import com.sunbeam.entity.Role;
 import com.sunbeam.entity.User;
+import com.sunbeam.exception.AuthenticationFailedException;
+import com.sunbeam.exception.InvalidInputException;
 import com.sunbeam.utils.DbUtil;
 
 public class userDaoimpl implements userDao {
@@ -25,6 +29,13 @@ public class userDaoimpl implements userDao {
 
 	@Override
 	public int save(User user) throws Exception {
+		
+		if(!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"))
+	        throw new InvalidInputException("Invalid Email Format");
+
+	    if(user.getPassword().length() < 6)
+	        throw new InvalidInputException("Password must be at least 6 characters");
+
 
 		String sql =
 		"insert into user(name,email,password,role) values(?,?,?,?)";
@@ -45,8 +56,13 @@ public class userDaoimpl implements userDao {
 
 	@Override
 	public User login(String email, String password)
-			throws Exception {
+			throws Exception, AuthenticationFailedException {
+		if(!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"))
+		    throw new InvalidInputException("Invalid Email Format");
 
+		if(password.length() < 6)
+		    throw new InvalidInputException("Invalid Password");
+		
 		String sql =
 		"select * from user where email=? and password=?";
 
@@ -76,6 +92,7 @@ public class userDaoimpl implements userDao {
 			return u;
 		}
 
-		return null;
+		throw new AuthenticationFailedException(
+		        "Invalid Email or Password");
 	}
 }

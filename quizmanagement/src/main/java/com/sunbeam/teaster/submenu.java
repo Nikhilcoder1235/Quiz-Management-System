@@ -7,9 +7,12 @@ import java.util.Set;
 import com.sunbeam.Daoimpl.QuizDaoimpl;
 import com.sunbeam.entity.Quiz;
 import com.sunbeam.entity.Result;
+import com.sunbeam.entity.User;
 import com.sunbeam.exception.NoQuestionsFoundException;
 import com.sunbeam.exception.NoQuizFoundException;
 import com.sunbeam.teaster.*;
+
+
 
 public class submenu {
 	Scanner sc = new Scanner(System.in);
@@ -38,6 +41,14 @@ public class submenu {
 
 					System.out.println("enter quiz path");
 					String path = sc.next();
+					
+					
+					if(!path.toLowerCase().endsWith(".csv")) {
+					    System.out.println("Only CSV File Allowed");
+					    return;
+					}
+					
+					
 					qdao.createQuiz(title, path);
 				} catch (NoQuestionsFoundException e) {
 					System.out.println("Error :" + e.getMessage());
@@ -102,7 +113,8 @@ public class submenu {
 				
 			case 5:
 				System.out.println("Logged Out Successfully!");
-				break;
+				return;
+				
 			default:
 				System.out.println("invalid");
 			}
@@ -113,7 +125,8 @@ public class submenu {
 
 
 
-public void StudentMenu() {
+public void StudentMenu(User u) {
+	
 	do {
 		System.out.println("1. View Quizes");
 		System.out.println("2. Take Quiz");
@@ -124,8 +137,85 @@ public void StudentMenu() {
 		System.out.print("Enter Choice : ");
 		choice = sc.nextInt();
 
-	}while (choice != 5);
+		
+		switch (choice) {
+		case 1:
+		try {
+			QuizDaoimpl qdao = new QuizDaoimpl();
+			System.out.println("List of quiz");
+			Set<Quiz> quizes = qdao.listquiz();
+			for( Quiz q: quizes) {
+				System.out.println(q);
+			}
+		}
+			catch(NoQuizFoundException e) {
+				System.out.println("Error:" + e.getMessage());
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+				
+			break;
+		case 2:
+			try {
+				
+				System.out.println("enter quiz id:");
+			QuizDaoimpl dao1=new QuizDaoimpl();
+			int std_id,quiz_id;
+		
+			quiz_id=sc.nextInt();
+			dao1.TakeQuiz(u.getId(), quiz_id);
+			}
+			
+			catch(NoQuizFoundException e) {
+				System.out.println("Error:" + e.getMessage());
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case 3:
+
+		    try {
+
+		        QuizDaoimpl dao1 =
+		                new QuizDaoimpl();
+
+		        List<Result> scores =
+		                dao1.viewScore(u.getId());
+
+		        System.out.println(
+		                "===== SCORES =====");
+
+		        for(Result r : scores) {
+		            System.out.println(
+		                    "Quiz Id : "
+		                    + r.getQuizId()
+		                    + " Score : "
+		                    + r.getScore());
+		        }
+
+		    }
+		    catch(NoQuizFoundException e) {
+		        System.out.println(
+		                "ERROR : "
+		                + e.getMessage());
+		    }
+		    catch(Exception e) {
+		        e.printStackTrace();
+		    }
+ 
+		    break;
+		case 4:
+		    System.out.println("Logged Out Successfully!");
+		    return;
+			default:
+				System.out.println("invalid");
+		
+	}
 	
+
+}while(choice != 4);
 }
 }
 

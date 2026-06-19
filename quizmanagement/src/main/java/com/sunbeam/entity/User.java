@@ -1,5 +1,7 @@
 package com.sunbeam.entity;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class User {
@@ -8,10 +10,12 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
-	Role role;
+	private Role role;
 	
+	
+	private Map<Integer,Attempt> attemptmap;
 	public User() {
-		
+		attemptmap = new HashMap<>();
 	}
 
 	public User(int id, String name, String email, String password, Role role) {
@@ -21,6 +25,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.role = role;
+		attemptmap = new HashMap<>();
 	}
 
 	public int getId() {
@@ -61,6 +66,16 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	
+
+	public Map<Integer, Attempt> getAttemptmap() {
+		return attemptmap;
+	}
+
+	public void setAttemptmap(Map<Integer, Attempt> attemptmap) {
+		this.attemptmap = attemptmap;
 	}
 
 	@Override

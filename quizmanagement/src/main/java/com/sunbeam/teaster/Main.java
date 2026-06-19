@@ -7,6 +7,7 @@ import com.sunbeam.dao.userDao;
 
 import com.sunbeam.entity.Role;
 import com.sunbeam.entity.User;
+import com.sunbeam.exception.InvalidInputException;
 import com.sunbeam.exception.NoQuestionsFoundException;
 
 public class Main {
@@ -85,6 +86,9 @@ try(userDao dao1 = new userDaoimpl())
 					if (count == 1)
 						System.out.println("Registration Successful");
 }
+catch(InvalidInputException e) {
+	System.out.println( "ERROR:"+e.getMessage());
+}
 				 catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -106,13 +110,21 @@ try(userDao dao1 = new userDaoimpl())
 
 						System.out.println("Welcome " + u.getName());
 						
-						smenu.StudentMenu();
+						smenu.StudentMenu(u);
 					} else {
 						System.out.println("Invalid Login");
 						
 						
 					}
-				} catch (Exception e) {
+					
+					
+				}
+				catch(InvalidInputException e) {
+				    System.out.println("ERROR : " + e.getMessage());
+				}
+				
+				
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
