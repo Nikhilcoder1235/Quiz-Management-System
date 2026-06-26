@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-
-
 import com.sunbeam.dao.userDao;
 import com.sunbeam.entity.Role;
 import com.sunbeam.entity.User;

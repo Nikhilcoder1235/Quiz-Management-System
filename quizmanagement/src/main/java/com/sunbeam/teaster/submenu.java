@@ -12,8 +12,6 @@ import com.sunbeam.exception.NoQuestionsFoundException;
 import com.sunbeam.exception.NoQuizFoundException;
 import com.sunbeam.teaster.*;
 
-
-
 public class submenu {
 	Scanner sc = new Scanner(System.in);
 	int choice;

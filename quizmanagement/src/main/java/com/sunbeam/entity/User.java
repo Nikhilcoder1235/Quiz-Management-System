@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class User {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class User  extends JFrame {
 
 	private int id;
 	private String name;
@@ -13,9 +16,12 @@ public class User {
 	private Role role;
 	
 	
+	
+	
 	private Map<Integer,Attempt> attemptmap;
 	public User() {
 		attemptmap = new HashMap<>();
+		
 	}
 
 	public User(int id, String name, String email, String password, Role role) {

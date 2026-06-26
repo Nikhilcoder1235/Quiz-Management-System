@@ -1,6 +1,7 @@
 package com.sunbeam.Daoimpl;
 
 import java.io.BufferedReader;
+import com.sunbeam.entity.Question;
 
 import java.io.FileReader;
 import java.sql.Connection;
@@ -103,7 +104,7 @@ public class QuizDaoimpl {
 
 	public List<Result> viewResults() throws Exception, NoQuizFoundException {
 		List<Result> results = new LinkedList<>();
-		String sql = "Select * from result";
+		String sql = "Select * from attempt";
 
 		PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -112,7 +113,7 @@ public class QuizDaoimpl {
 		while (rs.next()) {
 			Result r = new Result();
 
-			r.setResultid(rs.getInt("resultid"));
+			
 			r.setStudentId(rs.getInt("studentId"));
 			r.setQuizId(rs.getInt("quizId"));
 			r.setScore(rs.getInt("score"));
@@ -242,5 +243,47 @@ public List<Result> viewScore(int studentId) throws Exception,NoQuizFoundExcepti
     }
 
     return scores;
+}
+public List<Question> getQuestions(int quizId) throws Exception {
+
+    List<Question> questions = new LinkedList<>();
+
+    String sql = "select * from question where quizId=?";
+
+    PreparedStatement stmt = con.prepareStatement(sql);
+
+    stmt.setInt(1, quizId);
+
+    ResultSet rs = stmt.executeQuery();
+
+    while(rs.next()) {
+
+        Question q = new Question();
+
+        q.setQuestionId(rs.getInt("questionId"));
+        q.setQuestion(rs.getString("question"));
+        q.setOptionA(rs.getString("optionA"));
+        q.setOptionB(rs.getString("optionB"));
+        q.setOptionC(rs.getString("optionC"));
+        q.setOptionD(rs.getString("optionD"));
+        q.setAnswer(rs.getString("answer"));
+
+        questions.add(q);
+    }
+
+    return questions;
+}
+
+public void saveScore(int studentId, int quizId, int score) throws Exception {
+
+    String sql = "insert into attempt(studentId,quizId,score) values(?,?,?)";
+
+    PreparedStatement stmt = con.prepareStatement(sql);
+
+    stmt.setInt(1, studentId);
+    stmt.setInt(2, quizId);
+    stmt.setInt(3, score);
+
+    stmt.executeUpdate();
 }
 }
